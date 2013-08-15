@@ -1,0 +1,22 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:background="#FFF"
+    android:orientation="vertical" >
+
+    <SeekBar
+        android:id="@+id/seekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="10" />
+
+    <ImageView
+        android:id="@+id/imageView"
+        android:layout_width="256dip"
+        android:layout_height="256dip"
+        
+        android:src="@drawable/android_platform_256" />
+
+</LinearLayout>
