@@ -24,5 +24,5 @@ Enrique López Mañas - <eenriquelopez@gmail.com>
   <img alt="Follow me on LinkedIn"
        src="https://raw.github.com/ManuelPeinado/NumericPageIndicator/master/art/linkedin.png" />
 
-[1] https://github.com/kikoso/android-stackblur/tree/master/StackBlur
-[2] https://github.com/kikoso/android-stackblur/tree/master/StackBlurDemo
+[1]: https://github.com/kikoso/android-stackblur/tree/master/StackBlur
+[2]: https://github.com/kikoso/android-stackblur/tree/master/StackBlurDemo
