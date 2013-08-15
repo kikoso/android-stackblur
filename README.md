@@ -10,7 +10,7 @@ A [library][1] and a [sample application][2] are provided with the code.
 Developed By
 --------------------
 
-Manuel Peinado Gallego - <manuel.peinado@gmail.com>
+Enrique López Mañas - <eenriquelopez@gmail.com>
 
 <a href="https://twitter.com/eenriquelopez">
   <img alt="Follow me on Twitter"
