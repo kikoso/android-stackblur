@@ -2,8 +2,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center_horizontal"
     android:background="#FFF"
+    android:gravity="center_horizontal"
     android:orientation="vertical" >
 
     <SeekBar
@@ -12,11 +12,18 @@
         android:layout_height="wrap_content"
         android:max="10" />
 
+    <ToggleButton
+        android:id="@+id/toggleButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@android:color/black"
+        android:textOff="Image without transparency"
+        android:textOn="Image with transparency" />
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="256dip"
         android:layout_height="256dip"
-        
         android:src="@drawable/android_platform_256" />
 
 </LinearLayout>

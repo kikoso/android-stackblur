@@ -31,6 +31,7 @@ import java.io.FileOutputStream;
 import android.graphics.Bitmap;
 import android.graphics.Bitmap.Config;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 
 public class StackBlurManager {
@@ -56,6 +57,7 @@ public class StackBlurManager {
 	 */
 	private Bitmap _image;
 
+	private boolean alpha = false;
 	/**
 	 * Constructor method (basic initialization and construction of the pixel array)
 	 * @param image The image that will be analyed
@@ -64,7 +66,9 @@ public class StackBlurManager {
 		_width=image.getWidth();
 		_height=image.getHeight();
 		_image = image;
+
 		originalPixels= new int[_width*_height];
+
 		_image.getPixels(originalPixels, 0, _width, 0, 0, _width, _height);
 	}
 
@@ -130,6 +134,9 @@ public class StackBlurManager {
 			stackpointer=radius;
 
 			for (x=0;x<_width;x++){
+
+				if (!alpha)
+					alpha = (int)(Color.alpha(originalPixels[y*_height+x]))  != 255;
 
 				r[yi]=dv[rsum];
 				g[yi]=dv[gsum];
@@ -213,7 +220,11 @@ public class StackBlurManager {
 			yi=x;
 			stackpointer=radius;
 			for (y=0;y<_height;y++){
-				currentPixels[yi]=0xff000000 | (dv[rsum]<<16) | (dv[gsum]<<8) | dv[bsum];
+				// Preserve alpha channel: ( 0xff000000 & pix[yi] )
+				if ( alpha )
+					currentPixels[yi] = (0xff000000 & currentPixels[yi]) | (dv[rsum] << 16) | (dv[gsum] << 8) | dv[bsum];
+				else
+					currentPixels[yi]=0xff000000 | (dv[rsum]<<16) | (dv[gsum]<<8) | dv[bsum];
 
 				rsum-=routsum;
 				gsum-=goutsum;
