@@ -15,7 +15,7 @@ Acknowledgements
 --------------------
 * [Mario Klingemann][5] developed the original algorithm and gave me the idea to port it to Android.
 * [Manuel Peinado Gallego][6] has generously pointed me out some other sources working on the same area.
-
+* [Nicolas Pomepuy][7] pointed me out to his really useful article on the topic.
 
 Usage
 --------------------
@@ -68,3 +68,4 @@ Enrique López Mañas - <eenriquelopez@gmail.com>
 [4]: https://raw.github.com/kikoso/android-stackblur/master/art/screenshot2.png
 [5]: http://www.quasimondo.com/
 [6]: https://twitter.com/mpg2
+[7]: http://nicolaspomepuy.fr/
