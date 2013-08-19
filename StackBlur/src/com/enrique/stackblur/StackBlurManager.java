@@ -1,7 +1,7 @@
 /**
  * StackBlur v1.0 for Android
  * 
- * @Author: Enrique López Mañas <eenriquelopez@gmail.com>
+ * @Author: Enrique L√≥pez Ma√±as <eenriquelopez@gmail.com>
  * http://www.neo-tech.es
  * 
  * Author of the original algorithm: Mario Klingemann <mario.quasimondo.com>
@@ -19,8 +19,8 @@
  * or reduced by one, depending on if they are on the right or
  * on the left side of the stack. 
  *
- * @copyright: Enrique López Mañas
- * @license: GPL3
+ * @copyright: Enrique L√≥pez Ma√±as
+ * @license: Apache License 2.0
  */
 
 

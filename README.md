@@ -31,6 +31,16 @@ and finally obtain the image and load it into an ImageView or any other componen
 
     _imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
 
+Next steps
+--------------------
+As soon as I get some free time I want to add the following features:
+
+* Image processing through NDK
+* Multithreading
+* Support for PNG9/Alpha blurring
+
+If you want to colaborate with the project, feel free to submit a pull request!
+
 Developed By
 --------------------
 
