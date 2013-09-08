@@ -15,7 +15,7 @@ Acknowledgements
 --------------------
 * [Mario Klingemann][5] developed the original algorithm and gave me the idea to port it to Android.
 * [Manuel Peinado Gallego][6] has generously pointed me out some other sources working on the same area.
-
+* [Nicolas Pomepuy][7] pointed me out to his really useful article on the topic.
 
 Usage
 --------------------
@@ -31,13 +31,17 @@ and finally obtain the image and load it into an ImageView or any other componen
 
     _imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
 
+Version history
+--------------------
+* 19.08.2013: Added support for Alpha blurring
+
 Next steps
 --------------------
 As soon as I get some free time I want to add the following features:
 
 * Image processing through NDK
 * Multithreading
-* Support for PNG9/Alpha blurring
+* Support for PNG9
 
 If you want to colaborate with the project, feel free to submit a pull request!
 
@@ -64,3 +68,4 @@ Enrique López Mañas - <eenriquelopez@gmail.com>
 [4]: https://raw.github.com/kikoso/android-stackblur/master/art/screenshot2.png
 [5]: http://www.quasimondo.com/
 [6]: https://twitter.com/mpg2
+[7]: http://nicolaspomepuy.fr/
