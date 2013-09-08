@@ -33,6 +33,7 @@ and finally obtain the image and load it into an ImageView or any other componen
 
 Version history
 --------------------
+* 08.09.2013: Added support for Gradle
 * 19.08.2013: Added support for Alpha blurring
 
 Next steps
