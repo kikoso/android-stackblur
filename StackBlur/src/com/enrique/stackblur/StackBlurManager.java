@@ -135,8 +135,13 @@ public class StackBlurManager {
 
 			for (x=0;x<_width;x++){
 
-				if (!alpha)
-					alpha = (int)(Color.alpha(originalPixels[y*_height+x]))  != 255;
+				if (!alpha) {
+					int index = y * _height + x;
+					if (index >= originalPixels.length) {
+						index = originalPixels.length - 1;
+					}
+					alpha = (int) (Color.alpha(originalPixels[index])) != 255;
+				}
 
 				r[yi]=dv[rsum];
 				g[yi]=dv[gsum];
