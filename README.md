@@ -33,6 +33,7 @@ and finally obtain the image and load it into an ImageView or any other componen
 
 Version history
 --------------------
+* 02.12.2013: Solved the issue #1, provoking an ArrayOutOfBoundsException.
 * 08.09.2013: Added support for Gradle
 * 19.08.2013: Added support for Alpha blurring
 
