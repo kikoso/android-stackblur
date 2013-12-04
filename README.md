@@ -53,7 +53,7 @@ Next steps
 --------------------
 As soon as I get some free time I want to add the following features:
 
-* Image processing through NDK
+* Add support for RenderScript
 * Multithreading
 * Support for PNG9
 
