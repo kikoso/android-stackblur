@@ -140,10 +140,9 @@ public class StackBlurManager {
 			stackpointer=radius;
             
 			for (x=0;x<_width;x++){
-                
 				if (!alpha)
 					alpha = (int)(Color.alpha(originalPixels[y*_width+x]))  != 255;
-                
+
 				r[yi]=dv[rsum];
 				g[yi]=dv[gsum];
 				b[yi]=dv[bsum];
@@ -224,7 +223,7 @@ public class StackBlurManager {
 				}
 			}
 			yi=x;
-			stackpointer=radius;
+			stackpointer=radius;	
 			for (y=0;y<_height;y++){
 				// Preserve alpha channel: ( 0xff000000 & pix[yi] )
 				if ( alpha )
