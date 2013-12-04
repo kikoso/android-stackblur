@@ -20,14 +20,24 @@ import android.widget.ToggleButton;
 import com.enrique.stackblur.StackBlurManager;
 
 public class MainActivity extends RoboActivity {
-
-	@InjectView(R.id.imageView)    ImageView    _imageView;
-	@InjectView(R.id.seekBar)      SeekBar      _seekBar  ;
-	@InjectView(R.id.toggleButton) ToggleButton _toggleButton;
+    
+	@InjectView(R.id.imageView)        ImageView    _imageView;
+	@InjectView(R.id.seekBar)          SeekBar      _seekBar  ;
+	@InjectView(R.id.toggleButton)     ToggleButton _toggleButton;
+	@InjectView(R.id.toggleButtonMode) ToggleButton _toggleButtonMode;
+	
 	
 	private StackBlurManager _stackBlurManager;
 	
-	private String IMAGE_TO_ANALYZE = "android_platform_256.png";
+	private String IMAGE_TO_ANALYZE = "home_background.png";
+	
+	private boolean isNDKModus = false;
+	
+	private native void functionToBlur(Bitmap bitmapIn, Bitmap bitmapOut, int radius) ;
+	
+	static {
+	    System.loadLibrary("blur");
+	}
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +60,12 @@ public class MainActivity extends RoboActivity {
 			
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
-					boolean fromUser) {
-				_stackBlurManager.process(progress*5);
-				_imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
+                                          boolean fromUser) {
+				if (!isNDKModus) {
+					_imageView.setImageBitmap( _stackBlurManager.process(progress*5) );
+				} else {
+					_imageView.setImageBitmap( _stackBlurManager.processNatively(progress*5) );
+				}
 			}
 		});
 		
@@ -69,8 +82,16 @@ public class MainActivity extends RoboActivity {
 		        }
 		    }
 		});
+		
+		_toggleButtonMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+			
+			@Override
+			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+				isNDKModus = isChecked;
+			}
+		});
 	}
-
+    
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 		getMenuInflater().inflate(R.menu.main, menu);
@@ -89,5 +110,5 @@ public class MainActivity extends RoboActivity {
         }
         return bitmap;
     }
-
+    
 }
