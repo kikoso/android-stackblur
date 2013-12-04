@@ -30,9 +30,21 @@ Process using a certain radius with the following line:
 and finally obtain the image and load it into an ImageView or any other component:
 
     _imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
+    
+If you want to use the native code (NDK), first you need to compile the native files. Move to the folder where you have the project, and call:
+    
+    ndk-build
+    
+If everything goes alright, you will compile and generate a library object, libblur.so, in the folder libs. For more information regarding the NDK framework, please [click here][8]. Then, from the code you just need to code:
+
+    _stackBlurManager.processNatively(progress*5);
+
+The function processNatively(int radius) return the image already blurry. This code is 25-30 times faster as the Java code.
+
 
 Version history
 --------------------
+* 04.12.2013: Added support for NDK blurry, much faster.
 * 02.12.2013: Solved the issue #1, provoking an ArrayOutOfBoundsException.
 * 08.09.2013: Added support for Gradle
 * 19.08.2013: Added support for Alpha blurring
@@ -71,3 +83,4 @@ Enrique López Mañas - <eenriquelopez@gmail.com>
 [5]: http://www.quasimondo.com/
 [6]: https://twitter.com/mpg2
 [7]: http://nicolaspomepuy.fr/
+[8]: http://developer.android.com/tools/sdk/ndk/index.html
