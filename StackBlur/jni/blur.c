@@ -16,7 +16,7 @@ typedef struct {
     uint8_t alpha;
 } rgba;
 
-JNIEXPORT void JNICALL Java_com_enrique_stackblur_StackBlurManager_functionToBlur(JNIEnv* env, jobject obj, jobject bitmapIn, jobject bitmapOut, jint radius) {
+JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBlur(JNIEnv* env, jobject obj, jobject bitmapIn, jobject bitmapOut, jint radius) {
     LOGI("Blurring bitmap...");
 
     // Properties
