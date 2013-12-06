@@ -28,7 +28,7 @@ package com.enrique.stackblur;
 
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
+import android.support.v8.renderscript.RSRuntimeException;
 
 import java.io.FileOutputStream;
 
@@ -112,11 +112,13 @@ public class StackBlurManager {
 	 */
 	public Bitmap processRenderScript(Context context, float radius) {
 		BlurProcess blurProcess;
-		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+		// The renderscript support library doesn't have .so files for ARMv6.
+		// If the
+		try {
 			blurProcess = new RSBlurProcess(context);
-		else
+		} catch (RSRuntimeException e) {
 			blurProcess = new NativeBlurProcess();
-
+		}
 		_result = blurProcess.blur(_image, radius);
 		return _result;
 	}

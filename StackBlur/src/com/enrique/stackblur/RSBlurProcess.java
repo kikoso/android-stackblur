@@ -1,13 +1,8 @@
 package com.enrique.stackblur;
 
-import android.annotation.TargetApi;
 import android.content.Context;
 import android.graphics.Bitmap;
-import android.os.Build;
-import android.renderscript.Allocation;
-import android.renderscript.Element;
-import android.renderscript.RenderScript;
-import android.renderscript.ScriptIntrinsicBlur;
+import android.support.v8.renderscript.*;
 
 
 /**
@@ -16,7 +11,6 @@ import android.renderscript.ScriptIntrinsicBlur;
  * This should be very fast, even though it uses gausian blurring, it can be run on the gpu,
  * and uses hand-optimised assembly to be as fast as possible.
  */
-@TargetApi(Build.VERSION_CODES.JELLY_BEAN_MR1)
 class RSBlurProcess implements BlurProcess {
 	private RenderScript _rs;
 
@@ -42,7 +36,7 @@ class RSBlurProcess implements BlurProcess {
 		int newWidth = (int)(width * scale);
 		// ScriptIntrinsicBlur requires width to be a multiple of 4
 		// See https://plus.google.com/+RomanNurik/posts/TLkVQC3M6jW
-		newWidth += newWidth % 4;
+		newWidth += 4 - newWidth % 4;
 		scale = (double)newWidth / width;
 		int newHeight = (int) (height * scale);
 
