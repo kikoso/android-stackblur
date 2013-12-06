@@ -12,10 +12,16 @@ import android.support.v8.renderscript.*;
  * and uses hand-optimised assembly to be as fast as possible.
  */
 class RSBlurProcess implements BlurProcess {
-	private RenderScript _rs;
+	private final RenderScript _rs;
+	private final boolean _preserveAlpha;
 
 	public RSBlurProcess(Context context) {
+		this(context, true);
+	}
+
+	public RSBlurProcess(Context context, boolean preserveAlpha) {
 		_rs = RenderScript.create(context);
+		_preserveAlpha = preserveAlpha;
 	}
 
 	@Override
@@ -52,9 +58,22 @@ class RSBlurProcess implements BlurProcess {
 		blur.forEach(tmpOut);
 		tmpOut.copyTo(scaledOutput);
 
-		if(scale == 1)
-			return scaledOutput;
-		else
-			return Bitmap.createScaledBitmap(scaledOutput, width, height, true);
+		Bitmap output = Bitmap.createScaledBitmap(scaledOutput, width, height, true);
+		if(scaledOriginal != original)
+			scaledOriginal.recycle();
+		if(scaledOutput != output)
+			scaledOutput.recycle();
+		if(_preserveAlpha) {
+			int[] originalPixels = new int[width * height];
+			int[] outputPixels = new int[width * height];
+			output.getPixels(outputPixels, 0, width, 0, 0, width, height);
+			original.getPixels(originalPixels, 0, width, 0, 0, width, height);
+			for (int i = 0; i < width * height; i++) {
+				outputPixels[i] = (outputPixels[i] & 0x00ffffff) | (originalPixels[i] & 0xff000000);
+			}
+			output.setPixels(outputPixels, 0, width, 0, 0, width, height);
+		}
+
+		return output;
 	}
 }
