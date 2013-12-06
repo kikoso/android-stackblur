@@ -11,10 +11,14 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.SeekBar.OnSeekBarChangeListener;
+import android.widget.Spinner;
 import android.widget.ToggleButton;
 
 import com.enrique.stackblur.StackBlurManager;
@@ -24,20 +28,14 @@ public class MainActivity extends RoboActivity {
 	@InjectView(R.id.imageView)        ImageView    _imageView;
 	@InjectView(R.id.seekBar)          SeekBar      _seekBar  ;
 	@InjectView(R.id.toggleButton)     ToggleButton _toggleButton;
-	@InjectView(R.id.toggleButtonMode) ToggleButton _toggleButtonMode;
+	@InjectView(R.id.typeSelectSpinner) Spinner     _typeSelectSpinner;
 	
 	
 	private StackBlurManager _stackBlurManager;
 	
-	private String IMAGE_TO_ANALYZE = "home_background.png";
+	private String IMAGE_TO_ANALYZE = "android_platform_256.png";
 	
-	private boolean isNDKModus = false;
-	
-	private native void functionToBlur(Bitmap bitmapIn, Bitmap bitmapOut, int radius) ;
-	
-	static {
-	    System.loadLibrary("blur");
-	}
+	private int blurMode;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -61,41 +59,38 @@ public class MainActivity extends RoboActivity {
 			@Override
 			public void onProgressChanged(SeekBar seekBar, int progress,
                                           boolean fromUser) {
-				if (!isNDKModus) {
-					_imageView.setImageBitmap( _stackBlurManager.process(progress*5) );
-				} else {
-					_imageView.setImageBitmap( _stackBlurManager.processNatively(progress*5) );
-				}
+				onBlur();
 			}
 		});
 		
 		_toggleButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-		    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-		        if (isChecked) {
-		        	IMAGE_TO_ANALYZE = "image_transparency.png";
-		        	_stackBlurManager = new StackBlurManager(getBitmapFromAsset(getApplicationContext(), IMAGE_TO_ANALYZE));
-		        	_imageView.setImageDrawable(getResources().getDrawable(R.drawable.image_transparency));
-		        } else {
-		        	IMAGE_TO_ANALYZE = "android_platform_256.png";
-		        	_stackBlurManager = new StackBlurManager(getBitmapFromAsset(getApplicationContext(), IMAGE_TO_ANALYZE));
-		        	_imageView.setImageDrawable(getResources().getDrawable(R.drawable.android_platform_256));
-		        }
-		    }
-		});
-		
-		_toggleButtonMode.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-			
-			@Override
 			public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-				isNDKModus = isChecked;
+				if (isChecked) {
+					IMAGE_TO_ANALYZE = "image_transparency.png";
+					_stackBlurManager = new StackBlurManager(getBitmapFromAsset(getApplicationContext(), IMAGE_TO_ANALYZE));
+					onBlur();
+				} else {
+					IMAGE_TO_ANALYZE = "android_platform_256.png";
+					_stackBlurManager = new StackBlurManager(getBitmapFromAsset(getApplicationContext(), IMAGE_TO_ANALYZE));
+					onBlur();
+				}
 			}
 		});
-	}
-    
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		getMenuInflater().inflate(R.menu.main, menu);
-		return true;
+
+		ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.blur_modes, android.R.layout.simple_spinner_item);
+		adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+		_typeSelectSpinner.setAdapter(adapter);
+		_typeSelectSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+			@Override
+			public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+				setBlurMode(position);
+			}
+
+			@Override
+			public void onNothingSelected(AdapterView<?> parent) {
+
+			}
+		});
 	}
 	
     private Bitmap getBitmapFromAsset(Context context, String strName) {
@@ -110,5 +105,24 @@ public class MainActivity extends RoboActivity {
         }
         return bitmap;
     }
-    
+
+	public void setBlurMode(int mode) {
+		this.blurMode = mode;
+		onBlur();
+	}
+
+	private void onBlur() {
+		int radius = _seekBar.getProgress() * 5;
+		switch(blurMode) {
+			case 0:
+				_imageView.setImageBitmap( _stackBlurManager.process(radius) );
+				break;
+			case 1:
+				_imageView.setImageBitmap( _stackBlurManager.processNatively(radius) );
+				break;
+			case 2:
+				_imageView.setImageBitmap( _stackBlurManager.processRenderScript(this, radius) );
+				break;
+		}
+	}
 }
