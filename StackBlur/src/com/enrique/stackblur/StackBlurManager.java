@@ -26,7 +26,9 @@
 
 package com.enrique.stackblur;
 
+import android.content.Context;
 import android.graphics.Bitmap;
+import android.os.Build;
 
 import java.io.FileOutputStream;
 
@@ -99,6 +101,23 @@ public class StackBlurManager {
 	public Bitmap processNatively(int radius) {
 		NativeBlurProcess blur = new NativeBlurProcess();
 		_result = blur.blur(_image, radius);
+		return _result;
+	}
+
+	/**
+	 * Process the image using renderscript if possible
+	 * Fall back to native if renderscript is not available
+	 * @param context renderscript requires an android context
+	 * @param radius
+	 */
+	public Bitmap processRenderScript(Context context, float radius) {
+		BlurProcess blurProcess;
+		if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1)
+			blurProcess = new RSBlurProcess(context);
+		else
+			blurProcess = new NativeBlurProcess();
+
+		_result = blurProcess.blur(_image, radius);
 		return _result;
 	}
 }
