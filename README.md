@@ -16,6 +16,7 @@ Acknowledgements
 * [Mario Klingemann][5] developed the original algorithm and gave me the idea to port it to Android.
 * [Manuel Peinado Gallego][6] has generously pointed me out some other sources working on the same area.
 * [Nicolas Pomepuy][7] pointed me out to his really useful article on the topic.
+* [Dr-Emann][9] for his contribution adding RenderScript.
 
 Usage
 --------------------
@@ -41,9 +42,14 @@ If everything goes alright, you will compile and generate a library object, libb
 
 The function processNatively(int radius) return the image already blurry. This code is 25-30 times faster as the Java code.
 
+If you want to use RenderScript, you can do it by using:
+
+   _stackBlurManager.processRenderScript(progress*5);
+   
 
 Version history
 --------------------
+* 10.01.2014: Added RenderScript support thanks to [Dr-Emann][9]
 * 04.12.2013: Added support for NDK blurry, much faster.
 * 02.12.2013: Solved the issue #1, provoking an ArrayOutOfBoundsException.
 * 08.09.2013: Added support for Gradle
@@ -84,3 +90,4 @@ Enrique López Mañas - <eenriquelopez@gmail.com>
 [6]: https://twitter.com/mpg2
 [7]: http://nicolaspomepuy.fr/
 [8]: http://developer.android.com/tools/sdk/ndk/index.html
+[9]: https://github.com/Dr-Emann
