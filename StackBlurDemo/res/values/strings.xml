@@ -2,7 +2,10 @@
 <resources>
 
     <string name="app_name">Demo Example with StackBlur</string>
-    <string name="action_settings">Settings</string>
-    <string name="hello_world">Hello world!</string>
 
+    <string-array name="blur_modes">
+        <item>Java</item>
+        <item>Native</item>
+        <item>Renderscript</item>
+    </string-array>
 </resources>
