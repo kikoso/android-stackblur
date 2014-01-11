@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                xmlns:tools="http://schemas.android.com/tools"
+                tools:context=".BenchmarkActivity"
+                android:layout_width="fill_parent"
+                android:layout_height="fill_parent"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                android:paddingBottom="@dimen/activity_vertical_margin"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:paddingRight="@dimen/activity_horizontal_margin">
+
+    <TextView
+        android:id="@+id/label_java"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/java"
+        android:labelFor="@+id/progress_java"
+        android:layout_centerHorizontal="true"/>
+
+    <ProgressBar
+        android:id="@+id/progress_java"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:layout_below="@id/label_java"
+        />
+
+    <TextView
+        android:id="@+id/detail_java"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_java"
+        android:layout_alignRight="@id/progress_java"
+        android:gravity="right"
+        tools:text="20 ms"/>
+
+    <TextView
+        android:id="@+id/label_native"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_java"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/nativ"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_native"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:layout_below="@id/label_native"
+        />
+
+    <TextView
+        android:id="@+id/detail_native"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_native"
+        android:layout_alignRight="@id/progress_native"
+        android:gravity="right"
+        tools:text="20 ms"/>
+
+    <TextView
+        android:id="@+id/label_rs"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/detail_native"
+        android:layout_marginTop="5dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/renderscript"
+        />
+
+    <ProgressBar
+        android:id="@+id/progress_rs"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:indeterminate="false"
+        android:layout_below="@id/label_rs"
+        />
+
+    <TextView
+        android:id="@+id/detail_rs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/progress_rs"
+        android:layout_alignRight="@id/progress_rs"
+        android:gravity="right"
+        tools:text="20 ms"/>
+
+    <TextView
+        android:id="@+id/label_blur_amount"
+        android:layout_below="@id/detail_rs"
+        style="@android:style/TextAppearance.Large"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:text="@string/label_blur_amount"/>
+
+    <SeekBar
+        android:id="@+id/blur_amount"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/label_blur_amount"
+        android:max="50"/>
+
+    <TextView
+        android:id="@+id/blur_amount_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blur_amount"
+        android:layout_alignRight="@id/blur_amount"
+        android:text="0 px"/>
+
+    <!--
+    <Button
+        android:id="@+id/benchmark_start_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blur_amount"
+        android:layout_marginTop="30dp"
+        android:layout_centerHorizontal="true"
+        android:text="@string/benchmark_start"/>
+        -->
+
+    <ImageView
+        android:id="@+id/result_img"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/blur_amount_detail"
+        android:layout_alignParentBottom="true"
+        android:adjustViewBounds="true"
+        android:scaleType="fitCenter"
+        android:src="@drawable/image_transparency"
+        android:contentDescription="@string/desc_blurred_img"/>
+</RelativeLayout>

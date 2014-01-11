@@ -6,11 +6,14 @@ import java.io.InputStream;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -26,7 +29,7 @@ import com.enrique.stackblur.StackBlurManager;
 public class MainActivity extends RoboActivity {
     
 	@InjectView(R.id.imageView)        ImageView    _imageView;
-	@InjectView(R.id.seekBar)          SeekBar      _seekBar  ;
+	@InjectView(R.id.blur_amount)      SeekBar      _seekBar;
 	@InjectView(R.id.toggleButton)     ToggleButton _toggleButton;
 	@InjectView(R.id.typeSelectSpinner) Spinner     _typeSelectSpinner;
 	
@@ -92,8 +95,27 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 	}
-	
-    private Bitmap getBitmapFromAsset(Context context, String strName) {
+
+	@Override public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
+		MenuInflater inflater = getMenuInflater();
+		inflater.inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+	@Override public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
+		switch(item.getItemId()) {
+			case R.id.menu_benchmark:
+				Intent intent = new Intent(this, BenchmarkActivity.class);
+				startActivity(intent);
+				return true;
+			default:
+				return false;
+		}
+	}
+
+	private Bitmap getBitmapFromAsset(Context context, String strName) {
         AssetManager assetManager = context.getAssets();
         InputStream istr;
         Bitmap bitmap = null;
