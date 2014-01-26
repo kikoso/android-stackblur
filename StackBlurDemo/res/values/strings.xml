@@ -2,10 +2,17 @@
 <resources>
 
     <string name="app_name">Demo Example with StackBlur</string>
+    <string name="title_benchmark">StackBlur Benchmark</string>
+    <string name="java">Java</string>
+    <string name="nativ">Native</string>
+    <string name="renderscript">Renderscript</string>
+    <string name="benchmark_start">Start Benchmark</string>
+    <string name="label_blur_amount">Blur Amount</string>
+    <string name="desc_blurred_img">Blurred Image</string>
 
     <string-array name="blur_modes">
-        <item>Java</item>
-        <item>Native</item>
-        <item>Renderscript</item>
+        <item>@string/java</item>
+        <item>@string/nativ</item>
+        <item>@string/renderscript</item>
     </string-array>
 </resources>
