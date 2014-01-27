@@ -63,7 +63,9 @@ As soon as I get some free time I want to add the following features:
 * Multithreading
 * Support for PNG9
 
-If you want to colaborate with the project, feel free to submit a pull request!
+If you want to colaborate with the project, feel free to submit a pull request! 
+
+Also, if you have used Android StackBlur on your app and you let me know, I can link it from here :)
 
 Developed By
 --------------------
