@@ -59,16 +59,25 @@ JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBl
     int whMax = max(w, h);
     int div = radius + radius + 1;
 
-    int r[wh];
-    int g[wh];
-    int b[wh];
-    int rsum, gsum, bsum, x, y, i, yp, yi, yw;
-    rgba p;
-    int vmin[whMax];
-
     int divsum = (div + 1) >> 1;
     divsum *= divsum;
-    int dv[256 * divsum];
+
+    // r, g, b, vmin, and dv
+    int *holderArray = malloc(sizeof(int) * (3 * wh + whMax + (256 * divsum)));
+
+    // size: wh
+    int *r = holderArray;
+    // size: wh
+    int *g = holderArray + wh;
+    // size: wh
+    int *b = holderArray + 2 * wh;
+    int rsum, gsum, bsum, x, y, i, yp, yi, yw;
+    rgba p;
+    // size: whMax
+    int *vmin = holderArray + 3 * wh;
+
+    // size: 256 * divsum
+    int *dv = holderArray + 3 * wh + whMax;
     for (i = 0; i < 256 * divsum; i++) {
         dv[i] = (i / divsum);
     }
@@ -239,6 +248,8 @@ JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBl
             yi += w;
         }
     }
+
+    free(holderArray);
 
     // Unlocks everything
     AndroidBitmap_unlockPixels(env, bitmapIn);

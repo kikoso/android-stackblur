@@ -115,30 +115,21 @@ public class BenchmarkActivity extends RoboActivity {
 			if(isCancelled())
 				return outBitmap;
 
-			/*
 			// Native
-			try {
-				time = SystemClock.elapsedRealtime();
-				blurredBitmap = blurManager.processNatively(blurAmount);
-				result = new BlurBenchmarkResult("Native", (int) (SystemClock.elapsedRealtime() - time));
-				canvas.save(Canvas.CLIP_SAVE_FLAG);
-				canvas.clipRect(outBitmap.getWidth() / 3, 0, 2 * outBitmap.getWidth() / 3, inBitmap.getHeight());
-				canvas.drawBitmap(blurredBitmap, 0, 0, paint);
-				canvas.restore();
-				publishProgress(result);
-				blurredBitmap.recycle();
-			} catch (Throwable e) {
-				Toast.makeText(
-						BenchmarkActivity.this,
-						"Error occurred with native blur: " + e.getMessage(),
-						Toast.LENGTH_SHORT
-				).show();
-				Log.e("NativeBlur", "Couldn't blur with radius " + blurAmount, e);
-			}
+
+			time = SystemClock.elapsedRealtime();
+			blurredBitmap = blurManager.processNatively(blurAmount);
+			result = new BlurBenchmarkResult("Native", (int) (SystemClock.elapsedRealtime() - time));
+			canvas.save(Canvas.CLIP_SAVE_FLAG);
+			canvas.clipRect(outBitmap.getWidth() / 3, 0, 2 * outBitmap.getWidth() / 3, inBitmap.getHeight());
+			canvas.drawBitmap(blurredBitmap, 0, 0, paint);
+			canvas.restore();
+			publishProgress(result);
+			blurredBitmap.recycle();
 
 			if(isCancelled())
 				return outBitmap;
-*/
+
 			// Renderscript
 			time = SystemClock.elapsedRealtime();
 			blurredBitmap = blurManager.processRenderScript(getApplicationContext(), blurAmount);
