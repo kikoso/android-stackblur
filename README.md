@@ -49,6 +49,7 @@ If you want to use RenderScript, you can do it by using:
 
 Version history
 --------------------
+* 27.01.2014: Added Benchmarking, bug fixing thanks to [Dr-Emann][9]
 * 10.01.2014: Added RenderScript support thanks to [Dr-Emann][9]
 * 04.12.2013: Added support for NDK blurry, much faster.
 * 02.12.2013: Solved the issue #1, provoking an ArrayOutOfBoundsException.
@@ -59,7 +60,6 @@ Next steps
 --------------------
 As soon as I get some free time I want to add the following features:
 
-* Add support for RenderScript
 * Multithreading
 * Support for PNG9
 
