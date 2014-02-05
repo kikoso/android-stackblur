@@ -1,6 +1,5 @@
 #include <jni.h>
 #include <string.h>
-#include <math.h>
 #include <stdio.h>
 #include <android/log.h>
 #include <android/bitmap.h>
@@ -9,259 +8,347 @@
 #define LOGI(...)  __android_log_print(ANDROID_LOG_INFO,LOG_TAG,__VA_ARGS__)
 #define LOGE(...)  __android_log_print(ANDROID_LOG_ERROR,LOG_TAG,__VA_ARGS__)
 
-typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    uint8_t alpha;
-} rgba;
+// Based heavily on http://vitiy.info/Code/stackblur.cpp
+// See http://vitiy.info/stackblur-algorithm-multi-threaded-blur-for-cpp/
+// Stack Blur Algorithm by Mario Klingemann <mario@quasimondo.com>
 
-JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBlur(JNIEnv* env, jobject obj, jobject bitmapIn, jobject bitmapOut, jint radius) {
-    LOGI("Blurring bitmap...");
+static unsigned short const stackblur_mul[255] =
+{
+        512,512,456,512,328,456,335,512,405,328,271,456,388,335,292,512,
+        454,405,364,328,298,271,496,456,420,388,360,335,312,292,273,512,
+        482,454,428,405,383,364,345,328,312,298,284,271,259,496,475,456,
+        437,420,404,388,374,360,347,335,323,312,302,292,282,273,265,512,
+        497,482,468,454,441,428,417,405,394,383,373,364,354,345,337,328,
+        320,312,305,298,291,284,278,271,265,259,507,496,485,475,465,456,
+        446,437,428,420,412,404,396,388,381,374,367,360,354,347,341,335,
+        329,323,318,312,307,302,297,292,287,282,278,273,269,265,261,512,
+        505,497,489,482,475,468,461,454,447,441,435,428,422,417,411,405,
+        399,394,389,383,378,373,368,364,359,354,350,345,341,337,332,328,
+        324,320,316,312,309,305,301,298,294,291,287,284,281,278,274,271,
+        268,265,262,259,257,507,501,496,491,485,480,475,470,465,460,456,
+        451,446,442,437,433,428,424,420,416,412,408,404,400,396,392,388,
+        385,381,377,374,370,367,363,360,357,354,350,347,344,341,338,335,
+        332,329,326,323,320,318,315,312,310,307,304,302,299,297,294,292,
+        289,287,285,282,280,278,275,273,271,269,267,265,263,261,259
+};
 
+static unsigned char const stackblur_shr[255] =
+{
+        9, 11, 12, 13, 13, 14, 14, 15, 15, 15, 15, 16, 16, 16, 16, 17,
+        17, 17, 17, 17, 17, 17, 18, 18, 18, 18, 18, 18, 18, 18, 18, 19,
+        19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 19, 20, 20, 20,
+        20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 20, 21,
+        21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 21,
+        21, 21, 21, 21, 21, 21, 21, 21, 21, 21, 22, 22, 22, 22, 22, 22,
+        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22,
+        22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 22, 23,
+        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+        23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23, 23,
+        23, 23, 23, 23, 23, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24,
+        24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24, 24
+};
+
+/// Stackblur algorithm body
+void stackblurJob(unsigned char* src,                ///< input image data
+                  unsigned int w,                    ///< image width
+                  unsigned int h,                    ///< image height
+                  unsigned int radius,               ///< blur intensity (should be in 2..254 range)
+                  int cores,                         ///< total number of working threads
+                  int core,                          ///< current thread number
+                  int step                           ///< step of processing (1,2)
+                  )
+{
+    unsigned int x, y, xp, yp, i;
+    unsigned int sp;
+    unsigned int stack_start;
+    unsigned char* stack_ptr;
+
+    unsigned char* src_ptr;
+    unsigned char* dst_ptr;
+
+    unsigned long sum_r;
+    unsigned long sum_g;
+    unsigned long sum_b;
+    unsigned long sum_a;
+    unsigned long sum_in_r;
+    unsigned long sum_in_g;
+    unsigned long sum_in_b;
+    unsigned long sum_in_a;
+    unsigned long sum_out_r;
+    unsigned long sum_out_g;
+    unsigned long sum_out_b;
+    unsigned long sum_out_a;
+
+    unsigned int wm = w - 1;
+    unsigned int hm = h - 1;
+    unsigned int w4 = w * 4;
+    unsigned int div = (radius * 2) + 1;
+    unsigned int mul_sum = stackblur_mul[radius];
+    unsigned char shr_sum = stackblur_shr[radius];
+    unsigned char stack[div * 4];
+
+    if (step == 1)
+    {
+        int minY = core * h / cores;
+        int maxY = (core + 1) * h / cores;
+
+        for(y = minY; y < maxY; y++)
+        {
+            sum_r = sum_g = sum_b = sum_a =
+            sum_in_r = sum_in_g = sum_in_b = sum_in_a =
+            sum_out_r = sum_out_g = sum_out_b = sum_out_a = 0;
+
+            src_ptr = src + w4 * y; // start of line (0,y)
+
+            for(i = 0; i <= radius; i++)
+            {
+                stack_ptr    = &stack[ 4 * i ];
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+                sum_r += src_ptr[0] * (i + 1);
+                sum_g += src_ptr[1] * (i + 1);
+                sum_b += src_ptr[2] * (i + 1);
+                sum_a += src_ptr[3] * (i + 1);
+                sum_out_r += src_ptr[0];
+                sum_out_g += src_ptr[1];
+                sum_out_b += src_ptr[2];
+                sum_out_a += src_ptr[3];
+            }
+
+
+            for(i = 1; i <= radius; i++)
+            {
+                if (i <= wm) src_ptr += 4;
+                stack_ptr = &stack[ 4 * (i + radius) ];
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+                sum_r += src_ptr[0] * (radius + 1 - i);
+                sum_g += src_ptr[1] * (radius + 1 - i);
+                sum_b += src_ptr[2] * (radius + 1 - i);
+                sum_a += src_ptr[3] * (radius + 1 - i);
+                sum_in_r += src_ptr[0];
+                sum_in_g += src_ptr[1];
+                sum_in_b += src_ptr[2];
+                sum_in_a += src_ptr[3];
+            }
+
+
+            sp = radius;
+            xp = radius;
+            if (xp > wm) xp = wm;
+            src_ptr = src + 4 * (xp + y * w); //   img.pix_ptr(xp, y);
+            dst_ptr = src + y * w4; // img.pix_ptr(0, y);
+            for(x = 0; x < w; x++)
+            {
+                dst_ptr[0] = (sum_r * mul_sum) >> shr_sum;
+                dst_ptr[1] = (sum_g * mul_sum) >> shr_sum;
+                dst_ptr[2] = (sum_b * mul_sum) >> shr_sum;
+                dst_ptr[3] = (sum_a * mul_sum) >> shr_sum;
+                dst_ptr += 4;
+
+                sum_r -= sum_out_r;
+                sum_g -= sum_out_g;
+                sum_b -= sum_out_b;
+                sum_a -= sum_out_a;
+
+                stack_start = sp + div - radius;
+                if (stack_start >= div) stack_start -= div;
+                stack_ptr = &stack[4 * stack_start];
+
+                sum_out_r -= stack_ptr[0];
+                sum_out_g -= stack_ptr[1];
+                sum_out_b -= stack_ptr[2];
+                sum_out_a -= stack_ptr[3];
+
+                if(xp < wm)
+                {
+                    src_ptr += 4;
+                    ++xp;
+                }
+
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+
+                sum_in_r += src_ptr[0];
+                sum_in_g += src_ptr[1];
+                sum_in_b += src_ptr[2];
+                sum_in_a += src_ptr[3];
+                sum_r    += sum_in_r;
+                sum_g    += sum_in_g;
+                sum_b    += sum_in_b;
+                sum_a    += sum_in_a;
+
+                ++sp;
+                if (sp >= div) sp = 0;
+                stack_ptr = &stack[sp*4];
+
+                sum_out_r += stack_ptr[0];
+                sum_out_g += stack_ptr[1];
+                sum_out_b += stack_ptr[2];
+                sum_out_a += stack_ptr[3];
+                sum_in_r  -= stack_ptr[0];
+                sum_in_g  -= stack_ptr[1];
+                sum_in_b  -= stack_ptr[2];
+                sum_in_a  -= stack_ptr[3];
+
+
+            }
+
+        }
+    }
+
+    // step 2
+    if (step == 2)
+    {
+        int minX = core * w / cores;
+        int maxX = (core + 1) * w / cores;
+
+        for(x = minX; x < maxX; x++)
+        {
+            sum_r =    sum_g =    sum_b =    sum_a =
+            sum_in_r = sum_in_g = sum_in_b = sum_in_a =
+            sum_out_r = sum_out_g = sum_out_b = sum_out_a = 0;
+
+            src_ptr = src + 4 * x; // x,0
+            for(i = 0; i <= radius; i++)
+            {
+                stack_ptr    = &stack[i * 4];
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+                sum_r           += src_ptr[0] * (i + 1);
+                sum_g           += src_ptr[1] * (i + 1);
+                sum_b           += src_ptr[2] * (i + 1);
+                sum_a           += src_ptr[3] * (i + 1);
+                sum_out_r       += src_ptr[0];
+                sum_out_g       += src_ptr[1];
+                sum_out_b       += src_ptr[2];
+                sum_out_a       += src_ptr[3];
+            }
+            for(i = 1; i <= radius; i++)
+            {
+                if(i <= hm) src_ptr += w4; // +stride
+
+                stack_ptr = &stack[4 * (i + radius)];
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+                sum_r += src_ptr[0] * (radius + 1 - i);
+                sum_g += src_ptr[1] * (radius + 1 - i);
+                sum_b += src_ptr[2] * (radius + 1 - i);
+                sum_a += src_ptr[3] * (radius + 1 - i);
+                sum_in_r += src_ptr[0];
+                sum_in_g += src_ptr[1];
+                sum_in_b += src_ptr[2];
+                sum_in_a += src_ptr[3];
+            }
+
+            sp = radius;
+            yp = radius;
+            if (yp > hm) yp = hm;
+            src_ptr = src + 4 * (x + yp * w); // img.pix_ptr(x, yp);
+            dst_ptr = src + 4 * x;               // img.pix_ptr(x, 0);
+            for(y = 0; y < h; y++)
+            {
+                dst_ptr[0] = (sum_r * mul_sum) >> shr_sum;
+                dst_ptr[1] = (sum_g * mul_sum) >> shr_sum;
+                dst_ptr[2] = (sum_b * mul_sum) >> shr_sum;
+                dst_ptr[3] = (sum_a * mul_sum) >> shr_sum;
+                dst_ptr += w4;
+
+                sum_r -= sum_out_r;
+                sum_g -= sum_out_g;
+                sum_b -= sum_out_b;
+                sum_a -= sum_out_a;
+
+                stack_start = sp + div - radius;
+                if(stack_start >= div) stack_start -= div;
+                stack_ptr = &stack[4 * stack_start];
+
+                sum_out_r -= stack_ptr[0];
+                sum_out_g -= stack_ptr[1];
+                sum_out_b -= stack_ptr[2];
+                sum_out_a -= stack_ptr[3];
+
+                if(yp < hm)
+                {
+                    src_ptr += w4; // stride
+                    ++yp;
+                }
+
+                stack_ptr[0] = src_ptr[0];
+                stack_ptr[1] = src_ptr[1];
+                stack_ptr[2] = src_ptr[2];
+                stack_ptr[3] = src_ptr[3];
+
+                sum_in_r += src_ptr[0];
+                sum_in_g += src_ptr[1];
+                sum_in_b += src_ptr[2];
+                sum_in_a += src_ptr[3];
+                sum_r    += sum_in_r;
+                sum_g    += sum_in_g;
+                sum_b    += sum_in_b;
+                sum_a    += sum_in_a;
+
+                ++sp;
+                if (sp >= div) sp = 0;
+                stack_ptr = &stack[sp*4];
+
+                sum_out_r += stack_ptr[0];
+                sum_out_g += stack_ptr[1];
+                sum_out_b += stack_ptr[2];
+                sum_out_a += stack_ptr[3];
+                sum_in_r  -= stack_ptr[0];
+                sum_in_g  -= stack_ptr[1];
+                sum_in_b  -= stack_ptr[2];
+                sum_in_a  -= stack_ptr[3];
+            }
+        }
+    }
+}
+
+JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBlur(JNIEnv* env, jclass clzz, jobject bitmapOut, jint radius, jint threadCount, jint threadIndex, jint round) {
     // Properties
-    AndroidBitmapInfo   infoIn;
-    void*               pixelsIn;
     AndroidBitmapInfo   infoOut;
     void*               pixelsOut;
 
     int ret;
 
     // Get image info
-    if ((ret = AndroidBitmap_getInfo(env, bitmapIn, &infoIn)) < 0 || (ret = AndroidBitmap_getInfo(env, bitmapOut, &infoOut)) < 0) {
+    if ((ret = AndroidBitmap_getInfo(env, bitmapOut, &infoOut)) != 0) {
         LOGE("AndroidBitmap_getInfo() failed ! error=%d", ret);
         return;
     }
 
     // Check image
-    if (infoIn.format != ANDROID_BITMAP_FORMAT_RGBA_8888 || infoOut.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
+    if (infoOut.format != ANDROID_BITMAP_FORMAT_RGBA_8888) {
         LOGE("Bitmap format is not RGBA_8888!");
-        LOGE("==> %d %d", infoIn.format, infoOut.format);
+        LOGE("==> %d", infoOut.format);
         return;
     }
 
     // Lock all images
-    if ((ret = AndroidBitmap_lockPixels(env, bitmapIn, &pixelsIn)) < 0 || (ret = AndroidBitmap_lockPixels(env, bitmapOut, &pixelsOut)) < 0) {
+    if ((ret = AndroidBitmap_lockPixels(env, bitmapOut, &pixelsOut)) != 0) {
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
     }
 
-    int h = infoIn.height;
-    int w = infoIn.width;
+    int h = infoOut.height;
+    int w = infoOut.width;
 
-    LOGI("Image size is: %i %i", w, h);
-
-    rgba* input = (rgba*) pixelsIn;
-    rgba* output = (rgba*) pixelsOut;
-
-    int wm = w - 1;
-    int hm = h - 1;
-    int wh = w * h;
-    int whMax = max(w, h);
-    int div = radius + radius + 1;
-
-    int divsum = (div + 1) >> 1;
-    divsum *= divsum;
-
-    // r, g, b, vmin, and dv
-    int *holderArray = malloc(sizeof(int) * (3 * wh + whMax + (256 * divsum)));
-
-    // size: wh
-    int *r = holderArray;
-    // size: wh
-    int *g = holderArray + wh;
-    // size: wh
-    int *b = holderArray + 2 * wh;
-    int rsum, gsum, bsum, x, y, i, yp, yi, yw;
-    rgba p;
-    // size: whMax
-    int *vmin = holderArray + 3 * wh;
-
-    // size: 256 * divsum
-    int *dv = holderArray + 3 * wh + whMax;
-    for (i = 0; i < 256 * divsum; i++) {
-        dv[i] = (i / divsum);
-    }
-
-    yw = yi = 0;
-
-    int stack[div][3];
-    int stackpointer;
-    int stackstart;
-    int rbs;
-    int ir;
-    int ip;
-    int r1 = radius + 1;
-    int routsum, goutsum, boutsum;
-    int rinsum, ginsum, binsum;
-
-    for (y = 0; y < h; y++) {
-        rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
-        for (i = -radius; i <= radius; i++) {
-            p = input[yi + min(wm, max(i, 0))];
-
-            ir = i + radius; // same as sir
-
-            stack[ir][0] = p.red;
-            stack[ir][1] = p.green;
-            stack[ir][2] = p.blue;
-            rbs = r1 - abs(i);
-            rsum += stack[ir][0] * rbs;
-            gsum += stack[ir][1] * rbs;
-            bsum += stack[ir][2] * rbs;
-            if (i > 0) {
-                rinsum += stack[ir][0];
-                ginsum += stack[ir][1];
-                binsum += stack[ir][2];
-            } else {
-                routsum += stack[ir][0];
-                goutsum += stack[ir][1];
-                boutsum += stack[ir][2];
-            }
-        }
-        stackpointer = radius;
-
-        for (x = 0; x < w; x++) {
-
-            r[yi] = dv[rsum];
-            g[yi] = dv[gsum];
-            b[yi] = dv[bsum];
-
-            rsum -= routsum;
-            gsum -= goutsum;
-            bsum -= boutsum;
-
-            stackstart = stackpointer - radius + div;
-            ir = stackstart % div; // same as sir
-
-            routsum -= stack[ir][0];
-            goutsum -= stack[ir][1];
-            boutsum -= stack[ir][2];
-
-            if (y == 0) {
-                vmin[x] = min(x + radius + 1, wm);
-            }
-            p = input[yw + vmin[x]];
-
-            stack[ir][0] = p.red;
-            stack[ir][1] = p.green;
-            stack[ir][2] = p.blue;
-
-            rinsum += stack[ir][0];
-            ginsum += stack[ir][1];
-            binsum += stack[ir][2];
-
-            rsum += rinsum;
-            gsum += ginsum;
-            bsum += binsum;
-
-            stackpointer = (stackpointer + 1) % div;
-            ir = (stackpointer) % div; // same as sir
-
-            routsum += stack[ir][0];
-            goutsum += stack[ir][1];
-            boutsum += stack[ir][2];
-
-            rinsum -= stack[ir][0];
-            ginsum -= stack[ir][1];
-            binsum -= stack[ir][2];
-
-            yi++;
-        }
-        yw += w;
-    }
-    for (x = 0; x < w; x++) {
-        rinsum = ginsum = binsum = routsum = goutsum = boutsum = rsum = gsum = bsum = 0;
-        yp = -radius * w;
-        for (i = -radius; i <= radius; i++) {
-            yi = max(0, yp) + x;
-
-            ir = i + radius; // same as sir
-
-            stack[ir][0] = r[yi];
-            stack[ir][1] = g[yi];
-            stack[ir][2] = b[yi];
-
-            rbs = r1 - abs(i);
-
-            rsum += r[yi] * rbs;
-            gsum += g[yi] * rbs;
-            bsum += b[yi] * rbs;
-
-            if (i > 0) {
-                rinsum += stack[ir][0];
-                ginsum += stack[ir][1];
-                binsum += stack[ir][2];
-            } else {
-                routsum += stack[ir][0];
-                goutsum += stack[ir][1];
-                boutsum += stack[ir][2];
-            }
-
-            if (i < hm) {
-                yp += w;
-            }
-        }
-        yi = x;
-        stackpointer = radius;
-        for (y = 0; y < h; y++) {
-            output[yi].red = dv[rsum];
-            output[yi].green = dv[gsum];
-            output[yi].blue = dv[bsum];
-
-            rsum -= routsum;
-            gsum -= goutsum;
-            bsum -= boutsum;
-
-            stackstart = stackpointer - radius + div;
-            ir = stackstart % div; // same as sir
-
-            routsum -= stack[ir][0];
-            goutsum -= stack[ir][1];
-            boutsum -= stack[ir][2];
-
-            if (x == 0) vmin[y] = min(y + r1, hm) * w;
-            ip = x + vmin[y];
-
-            stack[ir][0] = r[ip];
-            stack[ir][1] = g[ip];
-            stack[ir][2] = b[ip];
-
-            rinsum += stack[ir][0];
-            ginsum += stack[ir][1];
-            binsum += stack[ir][2];
-
-            rsum += rinsum;
-            gsum += ginsum;
-            bsum += binsum;
-
-            stackpointer = (stackpointer + 1) % div;
-            ir = stackpointer; // same as sir
-
-            routsum += stack[ir][0];
-            goutsum += stack[ir][1];
-            boutsum += stack[ir][2];
-
-            rinsum -= stack[ir][0];
-            ginsum -= stack[ir][1];
-            binsum -= stack[ir][2];
-
-            yi += w;
-        }
-    }
-
-    free(holderArray);
+    stackblurJob((unsigned char*)pixelsOut, w, h, radius, threadCount, threadIndex, round);
 
     // Unlocks everything
-    AndroidBitmap_unlockPixels(env, bitmapIn);
     AndroidBitmap_unlockPixels(env, bitmapOut);
-
-    LOGI ("Bitmap blurred.");
-}
-
-int min(int a, int b) {
-    return a > b ? b : a;
-}
-
-int max(int a, int b) {
-    return a > b ? a : b;
 }

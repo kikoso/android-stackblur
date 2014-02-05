@@ -31,8 +31,13 @@ import android.graphics.Bitmap;
 import android.support.v8.renderscript.RSRuntimeException;
 
 import java.io.FileOutputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class StackBlurManager {
+	static final int EXECUTOR_THREADS = Runtime.getRuntime().availableProcessors();
+	static final ExecutorService EXECUTOR = Executors.newFixedThreadPool(EXECUTOR_THREADS);
+
 	/**
 	 * Original image
 	 */
