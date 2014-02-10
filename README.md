@@ -49,6 +49,7 @@ If you want to use RenderScript, you can do it by using:
 
 Version history
 --------------------
+* 10.02.2014: Added Multithreading support thanks to [Dr-Emann][9]
 * 27.01.2014: Added Benchmarking, bug fixing thanks to [Dr-Emann][9]
 * 10.01.2014: Added RenderScript support thanks to [Dr-Emann][9]
 * 04.12.2013: Added support for NDK blurry, much faster.
