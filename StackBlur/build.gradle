@@ -9,6 +9,11 @@ android {
     compileSdkVersion 19
     buildToolsVersion '19.0.1'
 
+    defaultConfig {
+        renderscriptTargetApi 19
+        renderscriptSupportMode true
+    }
+
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
