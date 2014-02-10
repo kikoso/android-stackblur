@@ -62,7 +62,6 @@ Next steps
 As soon as I get some free time I want to add the following features:
 
 * Uploading to MavenCentral
-* Multithreading
 * Support for PNG9
 
 If you want to colaborate with the project, feel free to submit a pull request! 
