@@ -2,7 +2,7 @@
  * StackBlur v1.0 for Android
  *
  * @Author: Enrique López Mañas <eenriquelopez@gmail.com>
- * http://www.neo-tech.es
+ * http://www.lopez-manas.com
  *
  * Author of the original algorithm: Mario Klingemann <mario.quasimondo.com>
  *
