@@ -317,6 +317,7 @@ JNIEXPORT void JNICALL Java_com_enrique_stackblur_NativeBlurProcess_functionToBl
     // Lock all images
     if ((ret = AndroidBitmap_lockPixels(env, bitmapOut, &pixelsOut)) != 0) {
         LOGE("AndroidBitmap_lockPixels() failed ! error=%d", ret);
+        return;
     }
 
     int h = infoOut.height;
