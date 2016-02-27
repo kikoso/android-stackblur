@@ -1,6 +1,5 @@
 Android StackBlur
 =================
-[![Badge](http://www.libtastic.com/static/osbadges/140.png)](http://www.libtastic.com/technology/140/)
 
 Android StackBlur is a library that can perform a blurry effect on a Bitmap based on a gradient or radius, and return the result. The library is based on the code of Mario Klingemann. 
 
