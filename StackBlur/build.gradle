@@ -1,16 +1,18 @@
 apply plugin: 'com.android.library'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation fileTree(dir: "$buildDir/native-libs", include: 'native-libs.jar')
 }
 
 android {
-    compileSdkVersion 19
-    buildToolsVersion '25.0.3'
+    compileSdkVersion 29
+    buildToolsVersion '28.0.3'
 
     defaultConfig {
-        renderscriptTargetApi 19
+        minSdkVersion 19
+        targetSdkVersion 29
+        renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
     }
 
@@ -25,7 +27,7 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')

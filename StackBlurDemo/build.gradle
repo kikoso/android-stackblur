@@ -1,13 +1,13 @@
 apply plugin: 'com.android.application'
 
 dependencies {
-    compile fileTree(dir: 'libs', include: '*.jar')
-    compile project(':StackBlur')
+    implementation fileTree(dir: 'libs', include: '*.jar')
+    implementation project(':StackBlur')
 }
 
 android {
     compileSdkVersion 19
-    buildToolsVersion '25.0.2'
+    buildToolsVersion '28.0.3'
 
     sourceSets {
         main {
@@ -20,7 +20,7 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
