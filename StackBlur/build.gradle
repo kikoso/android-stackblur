@@ -6,10 +6,12 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 19
+    compileSdkVersion 28
     buildToolsVersion '25.0.3'
 
     defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 28
         renderscriptTargetApi 19
         renderscriptSupportModeEnabled true
     }
@@ -25,7 +27,7 @@ android {
             assets.srcDirs = ['assets']
         }
 
-        instrumentTest.setRoot('tests')
+        androidTest.setRoot('tests')
 
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
