@@ -120,7 +120,7 @@ public class BenchmarkActivity extends RoboActivity {
 			time = SystemClock.elapsedRealtime();
 			blurredBitmap = blurManager.processNatively(blurAmount);
 			result = new BlurBenchmarkResult("Native", (int) (SystemClock.elapsedRealtime() - time));
-			canvas.save(Canvas.CLIP_SAVE_FLAG);
+			canvas.save();
 			canvas.clipRect(outBitmap.getWidth() / 3, 0, 2 * outBitmap.getWidth() / 3, inBitmap.getHeight());
 			canvas.drawBitmap(blurredBitmap, 0, 0, paint);
 			canvas.restore();
