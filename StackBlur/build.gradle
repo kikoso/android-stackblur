@@ -6,32 +6,29 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
         renderscriptTargetApi 22
-        renderscriptSupportModeEnabled true
+        renderscriptSupportModeEnabled false
     }
 
-    sourceSets {
-        main {
-            manifest.srcFile 'AndroidManifest.xml'
-            java.srcDirs = ['src']
-            resources.srcDirs = ['src']
-            aidl.srcDirs = ['src']
-            renderscript.srcDirs = ['src']
-            res.srcDirs = ['res']
-            assets.srcDirs = ['assets']
+    buildTypes {
+        debug {
+            minifyEnabled false
         }
-
-        androidTest.setRoot('tests')
-
-        debug.setRoot('build-types/debug')
-        release.setRoot('build-types/release')
     }
+
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Android.mk')
+        }
+    }
+
+    flavorDimensions 'cpuArch'
 }
 
 task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native libs') {

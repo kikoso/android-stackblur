@@ -15,7 +15,7 @@ build/*
 StackBlur/build/*
 StackBlurDemo/build/*
 StackBlur/obj/local/**/*
-
+*/.cxx/*
 
 # Local configuration file (sdk path, etc)
 local.properties

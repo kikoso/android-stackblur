@@ -1,0 +1,62 @@
+[
+  {
+    "level": "INFO",
+    "message": "Start JSON generation. Platform version: 19 min SDK version: arm64-v8a",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "rebuilding JSON C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a\\android_gradle_build.json due to:",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- expected json C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a\\android_gradle_build.json file is not present, will remove stale json folder",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- missing previous command file C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a\\build_command.txt, will remove stale json folder",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "- command changed from previous, will remove stale json folder",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "removing stale contents from \u0027C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a\u0027",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "created folder \u0027C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a\u0027",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "executing ndkBuild Executable : C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk\nNDK_APPLICATION_MK\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-19\nNDK_OUT\u003dC:/Users/Admin/Documents/GitHub/android-stackblur/StackBlur/build/intermediates/ndkBuild/debug/obj\nNDK_LIBS_OUT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build\\intermediates\\ndkBuild\\debug\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "Executable : C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\ndk-build.cmd\narguments : \nNDK_PROJECT_PATH\u003dnull\nAPP_BUILD_SCRIPT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk\nNDK_APPLICATION_MK\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Application.mk\nAPP_ABI\u003darm64-v8a\nNDK_ALL_ABIS\u003darm64-v8a\nNDK_DEBUG\u003d1\nAPP_PLATFORM\u003dandroid-19\nNDK_OUT\u003dC:/Users/Admin/Documents/GitHub/android-stackblur/StackBlur/build/intermediates/ndkBuild/debug/obj\nNDK_LIBS_OUT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build\\intermediates\\ndkBuild\\debug\\lib\nAPP_SHORT_COMMANDS\u003dfalse\nLOCAL_SHORT_COMMANDS\u003dfalse\n-B\n-n\njvmArgs : \n\n",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  },
+  {
+    "level": "INFO",
+    "message": "JSON generation completed with problem. Exception: Build command failed.\nError while executing process C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\ndk-build.cmd with arguments {NDK_PROJECT_PATH\u003dnull APP_BUILD_SCRIPT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk NDK_APPLICATION_MK\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Application.mk APP_ABI\u003darm64-v8a NDK_ALL_ABIS\u003darm64-v8a NDK_DEBUG\u003d1 APP_PLATFORM\u003dandroid-19 NDK_OUT\u003dC:/Users/Admin/Documents/GitHub/android-stackblur/StackBlur/build/intermediates/ndkBuild/debug/obj NDK_LIBS_OUT\u003dC:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build\\intermediates\\ndkBuild\\debug\\lib APP_SHORT_COMMANDS\u003dfalse LOCAL_SHORT_COMMANDS\u003dfalse -B -n}\nAndroid NDK: ERROR:C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk:rsjni: LOCAL_SRC_FILES points to a missing file    \nAndroid NDK: Check that C:/Users/Admin/Documents/GitHub/android-stackblur/StackBlur/jni/arm64-v8a/librsjni.so exists  or that its path is correct   \n\nC:/Users/Admin/AppData/Local/Android/Sdk/ndk/21.1.6352462/build//../build/core/prebuilt-library.mk:45: *** Android NDK: Aborting    .  Stop.\n",
+    "file": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+    "tag": "debug|arm64-v8a"
+  }
+]
