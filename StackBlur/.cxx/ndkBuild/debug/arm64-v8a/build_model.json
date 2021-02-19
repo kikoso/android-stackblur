@@ -4,14 +4,14 @@
   "buildSettings": {
     "environmentVariables": []
   },
-  "cxxBuildFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/.cxx/ndkBuild/debug/arm64-v8a",
+  "cxxBuildFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a",
   "info": {
     "abi": "ARM64_V8A",
     "bitness": 64,
     "deprecated": false,
     "default": true
   },
-  "originalCxxBuildFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/.cxx/ndkBuild/debug/arm64-v8a",
+  "originalCxxBuildFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\arm64-v8a",
   "variant": {
     "buildSystemArgumentList": [],
     "buildTargetSet": [],
@@ -22,20 +22,20 @@
     "isDebuggableEnabled": true,
     "module": {
       "buildSystem": "NDK_BUILD",
-      "cmakeToolchainFile": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462/build/cmake/android.toolchain.cmake",
-      "cxxFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/.cxx",
+      "cmakeToolchainFile": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\build\\cmake\\android.toolchain.cmake",
+      "cxxFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx",
       "gradleModulePathName": ":StackBlur",
-      "intermediatesFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/build/intermediates",
-      "makeFile": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/jni/Android.mk",
-      "moduleBuildFile": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/build.gradle",
-      "moduleRootFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur",
+      "intermediatesFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build\\intermediates",
+      "makeFile": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\jni\\Android.mk",
+      "moduleBuildFile": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build.gradle",
+      "moduleRootFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur",
       "ndkDefaultAbiList": [
         "ARMEABI_V7A",
         "ARM64_V8A",
         "X86",
         "X86_64"
       ],
-      "ndkFolder": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462",
+      "ndkFolder": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462",
       "ndkMetaAbiList": [
         {
           "abi": "ARMEABI_V7A",
@@ -92,36 +92,38 @@
       "ndkDefaultStl": "SYSTEM",
       "ndkVersion": "21.1.6352462",
       "project": {
-        "compilerSettingsCacheFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/.cxx",
-        "cxxFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/.cxx",
-        "ideBuildTargetAbi": "arm64-v8a,armeabi-v7a,armeabi",
+        "compilerSettingsCacheFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\.cxx",
+        "cxxFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\.cxx",
         "isBuildOnlyTargetAbiEnabled": true,
         "isCmakeBuildCohabitationEnabled": false,
         "isNativeCompilerSettingsCacheEnabled": false,
-        "rootBuildGradleFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur",
-        "sdkFolder": "/Users/enrique.lopezmanas/Library/Android/sdk",
+        "rootBuildGradleFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur",
+        "sdkFolder": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk",
         "isPrefabEnabled": false
       },
       "splitsAbiFilterSet": [],
       "stlSharedObjectMap": {
         "LIBCXX_SHARED": {
-          "ARMEABI_V7A": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/arm-linux-androideabi/libc++_shared.so",
-          "ARM64_V8A": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/aarch64-linux-android/libc++_shared.so",
-          "X86": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/i686-linux-android/libc++_shared.so",
-          "X86_64": "/Users/enrique.lopezmanas/Library/Android/sdk/ndk/21.1.6352462/toolchains/llvm/prebuilt/darwin-x86_64/sysroot/usr/lib/x86_64-linux-android/libc++_shared.so"
+          "ARMEABI_V7A": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\arm-linux-androideabi\\libc++_shared.so",
+          "ARM64_V8A": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\aarch64-linux-android\\libc++_shared.so",
+          "X86": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\i686-linux-android\\libc++_shared.so",
+          "X86_64": "C:\\Users\\Admin\\AppData\\Local\\Android\\Sdk\\ndk\\21.1.6352462\\toolchains\\llvm\\prebuilt\\windows-x86_64\\sysroot\\usr\\lib\\x86_64-linux-android\\libc++_shared.so"
         },
         "LIBCXX_STATIC": {},
         "NONE": {},
         "SYSTEM": {}
       }
     },
-    "objFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/build/intermediates/ndkBuild/debug/obj/local",
+    "objFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\build\\intermediates\\ndkBuild\\debug\\obj\\local",
     "variantName": "debug",
     "validAbiList": [
-      "ARM64_V8A"
+      "ARMEABI_V7A",
+      "ARM64_V8A",
+      "X86",
+      "X86_64"
     ],
-    "prefabDirectory": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/.cxx/ndkBuild/debug/prefab",
+    "prefabDirectory": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\prefab",
     "prefabPackageDirectoryList": []
   },
-  "prefabFolder": "/Users/enrique.lopezmanas/Documents/android-stackblur/StackBlur/.cxx/ndkBuild/debug/prefab/arm64-v8a"
+  "prefabFolder": "C:\\Users\\Admin\\Documents\\GitHub\\android-stackblur\\StackBlur\\.cxx\\ndkBuild\\debug\\prefab\\arm64-v8a"
 }
