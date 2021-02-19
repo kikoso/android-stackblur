@@ -6,17 +6,23 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 29
-    buildToolsVersion '28.0.3'
+    compileSdkVersion 30
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         minSdkVersion 19
-        targetSdkVersion 29
+        targetSdkVersion 30
         renderscriptTargetApi 22
         renderscriptSupportModeEnabled true
     }
 
-    sourceSets {
+    buildTypes {
+        debug {
+            minifyEnabled false
+        }
+    }
+
+ /*   sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
             java.srcDirs = ['src']
@@ -31,7 +37,34 @@ android {
 
         debug.setRoot('build-types/debug')
         release.setRoot('build-types/release')
+    }*/
+
+    externalNativeBuild {
+        ndkBuild {
+            path file('jni/Android.mk')
+        }
     }
+
+    flavorDimensions 'cpuArch'
+  /*  productFlavors {
+        arm8 {
+            dimension 'cpuArch'
+            ndk {
+                abiFilters 'arm64-v8a', 'armeabi-v7a'
+            }
+        }
+        x86_64 {
+            dimension 'cpuArch'
+            ndk {
+                abiFilters 'x86_64', 'x86'
+            }
+        }
+        universal {
+            dimension 'cpuArch'
+            // include all default ABIs. with NDK-r16,  it is:
+            //   armeabi-v7a, arm64-v8a, x86, x86_64
+        }
+    }*/
 }
 
 task nativeLibsToJar(type: Zip, description: 'create a jar archive of the native libs') {
