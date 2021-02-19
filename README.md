@@ -22,15 +22,15 @@ Usage
 --------------------
 Download the library with git. When it has been imported into your project. First initialize your StackBlurManager to load a sample image:
 ```java
-    _stackBlurManager = new StackBlurManager(getBitmapFromAsset(this, "android_platform_256.png"));
+    stackBlurManager = new StackBlurManager(getBitmapFromAsset(this, "android_platform_256.png"));
 ```
 Process using a certain radius with the following line:
 ```java
-    _stackBlurManager.process(progress*5);
+    stackBlurManager.process(progress*5);
 ```
 and finally obtain the image and load it into an ImageView or any other component:
 ```java
-    _imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
+    imageView.setImageBitmap(_stackBlurManager.returnBlurredImage() );
 ```
 If you want to use the native code (NDK), first you need to compile the native files. Move to the folder where you have the project, and call:
 ```bash    
@@ -38,13 +38,13 @@ If you want to use the native code (NDK), first you need to compile the native f
 ```
 If everything goes alright, you will compile and generate a library object, libblur.so, in the folder libs. For more information regarding the NDK framework, please [click here][8]. Then, from the code you just need to code:
 ```java
-    _stackBlurManager.processNatively(progress*5);
+    stackBlurManager.processNatively(progress*5);
 ```
 The function processNatively(int radius) return the image already blurry. This code is 25-30 times faster as the Java code.
 
 If you want to use RenderScript, you can do it by using:
 ```java
-   _stackBlurManager.processRenderScript(progress*5);
+   stackBlurManager.processRenderScript(progress*5);
 ```
 
 Version history
