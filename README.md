@@ -16,7 +16,7 @@ Acknowledgements
 * [Mario Klingemann][5] developed the original algorithm and gave me the idea to port it to Android.
 * [Manuel Peinado Gallego][6] has generously pointed me out some other sources working on the same area.
 * [Nicolas Pomepuy][7] pointed me out to his really useful article on the topic.
-* [Dr-Emann][9] for his contribution adding RenderScript and Muiltithreding support.
+* [Dr-Emann][9] for his contribution adding RenderScript and Muiltithreading support.
 
 Usage
 --------------------
